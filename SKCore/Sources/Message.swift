@@ -53,6 +53,7 @@ public final class Message: Equatable {
     public var responseType: MessageResponseType?
     public var replaceOriginal: Bool?
     public var deleteOriginal: Bool?
+    public var clientMessageId: String?
     public let edited: Edited?
 
     public init(dictionary: [String: Any]?) {
@@ -86,6 +87,7 @@ public final class Message: Equatable {
         responseType = MessageResponseType(rawValue: dictionary?["response_type"] as? String ?? "")
         replaceOriginal = dictionary?["replace_original"] as? Bool
         deleteOriginal = dictionary?["delete_original"] as? Bool
+        clientMessageId = dictionary?["client_msg_id"] as? String
         edited = Edited(edited:dictionary?["edited"] as? [String: Any])
     }
 

@@ -21,7 +21,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-public enum EventType: String {
+public enum EventType: String,CaseIterable {
     case hello = "hello"
     case message = "message"
     case userTyping = "user_typing"
@@ -167,6 +167,7 @@ public class Event {
     public let subteamID: String?
     public let profile: CustomProfile?
     public let inviterID: String?
+    public let previousMessage: Message?
 
     //swiftlint:disable function_body_length
     public init(_ event: [String: Any]) {
@@ -206,7 +207,9 @@ public class Event {
         channelType = event["channel_type"] as? String
         teamID = event["team"] as? String
         inviterID = event["inviter"] as? String
-
+        previousMessage = Message(dictionary: event["previous_message"] as? [String: Any])
+        
+        
         // Comment, Channel, and User can come across as Strings or Dictionaries
         if let commentDictionary = event["comment"] as? [String: Any] {
             comment = Comment(comment: commentDictionary)
