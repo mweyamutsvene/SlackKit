@@ -186,7 +186,7 @@ extension WebAPI {
     public func channelsList(
         excludeArchived: Bool = false,
         excludeMembers: Bool = false,
-        success: ((_ channels: [[String: Any]]?) -> Void)?,
+        success: ((_ channels: [Channel]?) -> Void)?,
         failure: FailureClosure?
     ) {
         list(.channelsList, type:.channel, excludeArchived: excludeArchived, excludeMembers: excludeMembers, success: {(channels) in
@@ -589,7 +589,7 @@ extension WebAPI {
     public func groupsList(
         excludeArchived: Bool = false,
         excludeMembers: Bool = false,
-        success: ((_ channels: [[String: Any]]?) -> Void)?,
+        success: ((_ channels: [Channel]?) -> Void)?,
         failure: FailureClosure?
     ) {
         list(.groupsList, type:.group, excludeArchived: excludeArchived, excludeMembers: excludeMembers, success: {(channels) in
@@ -670,7 +670,7 @@ extension WebAPI {
     public func imsList(
         excludeArchived: Bool = false,
         excludeMembers: Bool = false,
-        success: ((_ channels: [[String: Any]]?) -> Void)?,
+        success: ((_ channels: [Channel]?) -> Void)?,
         failure: FailureClosure?
     ) {
         list(.imList, type:.im, excludeArchived: excludeArchived, excludeMembers: excludeMembers, success: {(channels) in
@@ -736,7 +736,7 @@ extension WebAPI {
     public func mpimsList(
         excludeArchived: Bool = false,
         excludeMembers: Bool = false,
-        success: ((_ channels: [[String: Any]]?) -> Void)?,
+        success: ((_ channels: [Channel]?) -> Void)?,
         failure: FailureClosure?
     ) {
         list(.mpimList, type:.group, excludeArchived: excludeArchived, excludeMembers: excludeMembers, success: {(channels) in
@@ -1155,11 +1155,25 @@ extension WebAPI {
             failure?(error)
         }
     }
+    
+    public func botInfo(id: String, success: ((_ bot: Bot) -> Void)?, failure: FailureClosure?) {
+        let parameters: [String: Any] = ["token": token, "bot": id]
+        networkInterface.request(.botInfo, parameters: parameters, successClosure: {(response) in
+            success?(Bot(bot: response["bot"] as? [String: Any]))
+        }) {(error) in
+            failure?(error)
+        }
+    }
 
-    public func usersList(includePresence: Bool = false, success: ((_ userList: [[String: Any]]?) -> Void)?, failure: FailureClosure?) {
+    public func usersList(includePresence: Bool = false, success: ((_ userList: [User]?) -> Void)?, failure: FailureClosure?) {
         let parameters: [String: Any] = ["token": token, "presence": includePresence]
         networkInterface.request(.usersList, parameters: parameters, successClosure: {(response) in
-            success?(response["members"] as? [[String: Any]])
+            let list = (response["members"] as? [[String: Any]])
+            let users = list?.compactMap({ dict in
+                return User(user: dict)
+            })
+            
+            success?(users)
         }) {(error) in
             failure?(error)
         }
@@ -1484,12 +1498,16 @@ extension WebAPI {
         type: ChannelType,
         excludeArchived: Bool = false,
         excludeMembers: Bool = false,
-        success: ((_ channels: [[String: Any]]?) -> Void)?,
+        success: ((_ channels: [Channel]?) -> Void)?,
         failure: FailureClosure?
     ) {
         let parameters: [String: Any] = ["token": token, "exclude_archived": excludeArchived, "exclude_members": excludeMembers]
         networkInterface.request(endpoint, parameters: parameters, successClosure: {(response) in
-            success?(response[type.rawValue+"s"] as? [[String: Any]])
+            let list = (response[type.rawValue+"s"] as? [[String: Any]])
+            let channels = list?.compactMap({ dict in
+                return Channel(channel: dict)
+            })
+            success?(channels)
         }) {(error) in
             failure?(error)
         }

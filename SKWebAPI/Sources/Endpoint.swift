@@ -97,4 +97,6 @@ public enum Endpoint: String {
     case searchAll = "search.all"
     case searchFiles = "search.files"
     case searchMessages = "search.messages"
+    case botInfo = "bots.info"
+
 }

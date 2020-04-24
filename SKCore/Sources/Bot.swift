@@ -25,14 +25,21 @@ public struct Bot {
     public let id: String?
     public var botToken: String?
     public var name: String?
+    public var image24: String?
+    public var image36: String?
+    public var image48: String?
+    public var image72: String?
     public var icons: [String: Any]?
-
+    
     public init(bot: [String: Any]?) {
         id = bot?["id"] as? String
         name = bot?["name"] as? String
         icons = bot?["icons"] as? [String: Any]
+        image36 = icons?["image_36"] as? String
+        image48 = icons?["image_48"] as? String
+        image72 = icons?["image_72"] as? String
     }
-
+    
     public init(botUser: [String: Any]?) {
         id = botUser?["bot_user_id"] as? String
         botToken = botUser?["bot_access_token"] as? String

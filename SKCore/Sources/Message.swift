@@ -30,7 +30,7 @@ public final class Message: Equatable {
     public var replyCount: Int?
     public var replies: [Reply]?
     public let user: String?
-    public let channel: String?
+    public var channel: String?
     public var hidden: Bool?
     public var text: String?
     public let botID: String?
@@ -57,6 +57,12 @@ public final class Message: Equatable {
     public let edited: Edited?
 
     public init(dictionary: [String: Any]?) {
+        
+        var dictionary = dictionary
+        if let messageDictionary = dictionary?["message"] {
+            dictionary = messageDictionary as? [String : Any]
+        }
+        
         subtype = dictionary?["subtype"] as? String
         ts = dictionary?["ts"] as? String
         threadTs = dictionary?["thread_ts"] as? String

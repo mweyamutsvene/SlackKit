@@ -193,7 +193,7 @@ public class Event {
         reaction = event["reaction"] as? String
         replyTo = event["reply_to"] as? Double
         reactions = event["reactions"] as? [[String: Any]]
-        bot = Bot(bot: event["bot"] as? [String: Any])
+        bot = Bot(bot: event["bot_profile"] as? [String: Any])
         edited = Edited(edited:event["edited"] as? [String: Any])
         dndStatus = DoNotDisturbStatus(status: event["dnd_status"] as? [String: Any])
         itemUser = event["item_user"] as? String
