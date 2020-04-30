@@ -21,7 +21,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-public struct Channel {
+public class Channel {
     public let id: String?
     public let created: Int?
     public let creator: String?

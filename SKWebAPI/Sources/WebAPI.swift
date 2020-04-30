@@ -1248,6 +1248,36 @@ extension WebAPI {
 
 // MARK: - Conversations
 extension WebAPI {
+    public func conversationsInfo(id: String, success: ChannelClosure?, failure: FailureClosure?) {
+        info(.conversationsInfo, type:.channel, id: id, success: {(channel) in
+            success?(channel)
+        }) {(error) in
+            failure?(error)
+        }
+    }
+    
+    public func conversationsHistory(
+        id: String,
+        latest: String = "\(Date().timeIntervalSince1970)",
+        oldest: String = "0", inclusive: Bool = false,
+        count: Int = 100, unreads: Bool = false,
+        success: HistoryClosure?,
+        failure: FailureClosure?
+    ) {
+        history(.conversationsHistory,
+                id: id,
+                latest: latest,
+                oldest: oldest,
+                inclusive: inclusive,
+                count: count,
+                unreads: unreads,
+                success: {(history) in
+                    success?(history)
+        }) {(error) in
+            failure?(error)
+        }
+    }
+    
     public func conversationsList(
         excludeArchived: Bool = false,
         cursor: String? = nil,
