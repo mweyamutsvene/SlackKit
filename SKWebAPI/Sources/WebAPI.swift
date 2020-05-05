@@ -1311,7 +1311,7 @@ extension WebAPI {
         latest: String = "\(Date().timeIntervalSince1970)",
         limit: Int = 10,
         oldest: String = "0",
-        success: ((_ channels: [[String: Any]]?, _ nextCursor: String?) -> Void)?,
+        success: ((_ channels: [Message]?, _ nextCursor: String?) -> Void)?,
         failure: FailureClosure?
     ) {
         var parameters: [String: Any] = [
@@ -1327,7 +1327,11 @@ extension WebAPI {
             parameters["cursor"] = cursor
         }
         networkInterface.request(.conversationsReplies, parameters: parameters, successClosure: {(response) in
-            success?(response["messages"] as? [[String: Any]], (response["response_metadata"] as? [String: Any])?["next_cursor"] as? String)
+            let list = (response["messages"] as? [[String: Any]])
+            let channels = list?.compactMap({ dict in
+                return Message(dictionary: dict)
+            })
+            success?(channels, (response["response_metadata"] as? [String: Any])?["next_cursor"] as? String)
         }) {(error) in
             failure?(error)
         }
