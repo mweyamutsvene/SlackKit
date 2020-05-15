@@ -29,6 +29,7 @@ public final class Message: Equatable {
     public let parentUserId: String?
     public var replyCount: Int?
     public var replies: [Reply]?
+    public var replyUsers: [String]?
     public let user: String?
     public var channel: String?
     public var hidden: Bool?
@@ -95,6 +96,7 @@ public final class Message: Equatable {
         deleteOriginal = dictionary?["delete_original"] as? Bool
         clientMessageId = dictionary?["client_msg_id"] as? String
         edited = Edited(edited:dictionary?["edited"] as? [String: Any])
+        replyUsers = dictionary?["reply_users"] as? [String]
     }
 
     public init(ts: String?) {
