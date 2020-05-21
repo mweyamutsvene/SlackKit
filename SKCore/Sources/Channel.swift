@@ -33,6 +33,8 @@ public class Channel {
     public let isMPIM: Bool?
     public var user: String?
     public var isUserDeleted: Bool?
+    public var isPrivate:Bool?
+    public var isChannel:Bool?
     public var isOpen: Bool?
     public var topic: Topic?
     public var purpose: Topic?
@@ -69,6 +71,8 @@ public class Channel {
         unreadCountDisplay = channel?["unread_count_display"] as? Int
         hasPins = channel?["has_pins"] as? Bool
         members = channel?["members"] as? [String]
+        isPrivate = channel?["is_private"] as? Bool
+        isChannel = channel?["is_channel"] as? Bool
 
         if let latestMesssageDictionary = channel?["latest"] as? [String: Any] {
             latest = Message(dictionary: latestMesssageDictionary)
